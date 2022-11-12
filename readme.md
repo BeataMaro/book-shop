@@ -1,0 +1,1 @@
+Deployed site: **https://beatamaro.github.io/book-shop/pages/catalog/**
