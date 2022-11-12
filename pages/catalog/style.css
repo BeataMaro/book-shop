@@ -3,3 +3,9 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+article.book-tile {
+    border-radius: 6px;
+    box-shadow: 1px 1px 14px rgba(0,0,0,.4);
+    padding: 1rem 1.5rem;
+}
