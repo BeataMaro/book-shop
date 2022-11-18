@@ -6,15 +6,76 @@
   box-sizing: border-box;
 }
 
+body {
+  max-width: 100vw;
+}
+
+body.modal-open {
+  height: 100vh;
+  overflow-y: hidden;
+  padding-right: 15px;
+  background: rgba(0,0,0,.5);
+  z-index: 1;
+}
+
+header div.hero-banner {
+  width: 100vw;
+  height: 80vh;
+  background-image: url("../../assets/images/christian-burri-unsplash.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
+}
+
+section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
 img.book-cover {
   max-width: 100%;
   width: 250px;
-  height: 400px;
-  aspect-ratio: 2 / 1;
+ 
 }
 
 article.book-tile {
   border-radius: 6px;
-  box-shadow: 1px 1px 14px rgba(0, 0, 0, 0.4);
+  width: 40%;
+  box-shadow: 1px 1px 14px rgba(0, 0, 0, 0.2);
   padding: 1rem 1.5rem;
+}
+
+article.book-tile .description-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50vw;
+  padding: 1rem 2rem;
+  border-radius: 6px;
+  background-color: khaki;
+  visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+article.book-tile.modal-open .description-modal {
+  visibility: visible;
+  z-index: 2;
+}
+
+article.book-tile .close-modal-btn {
+  align-self: flex-end;
+  cursor: pointer;
+  padding: .3rem;
+}
+article.book-tile button.show-more-btn {
+  cursor: pointer;
+}
+
+article.book-tile button.add-to-bag-btn {
+  cursor: pointer;
 }

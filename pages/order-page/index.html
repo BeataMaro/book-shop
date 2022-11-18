@@ -5,25 +5,36 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Order</title>
-    <link rel="stylesheet" href="./style.css">
-    <script src="./main.js" defer></script>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./main.js" type="module" defer></script>
+    <script src="../catalog/main.js" type="module" defer></script>
   </head>
   <body>
-    <form name="delivery-form">
+    <form name="delivery-form" class="delivery-form" target="#" method="POST">
+      <label for="name">Name<span aria-label="required">*</span></label>
       <input
         type="text"
         name="firstname"
         minlength="4"
+        id="name"
         placeholder="Name"
         required
+        aria-errormessage="err1"
       />
+      <span id="err1" class="error-message">The field is invalid</span>
+      <label for="surname">Surname<span aria-label="required">*</span></label>
       <input
         type="text"
-        name="lastname"
+        name="surname"
         minlength="5"
         placeholder="Surname"
+        id="surname"
         required
+        aria-errormessage="err2"
+
       />
+      <span id="err2" class="error-message">The field is invalid</span>
+
       <label for="delivery-date">Delivery date:</label>
       <input type="date" name="delivery-date" id="delivery-date" required />
 

@@ -1,1 +1,22 @@
 @import "../catalog/style.css";
+
+form.delivery-form {
+  padding: 2rem;
+}
+
+form.delivery-form input {
+  padding: 0.5rem 1rem;
+}
+
+form.delivery-form input:invalid {
+  border: 1px solid #d23c3c;
+}
+
+form.delivery-form span.error-message {
+  visibility: hidden;
+  color: #d23c3c;
+}
+
+form.delivery-form input:invalid ~ span.error-message {
+  visibility: visible;
+}
