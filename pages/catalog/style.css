@@ -14,7 +14,7 @@ body.modal-open {
   height: 100vh;
   overflow-y: hidden;
   padding-right: 15px;
-  background: rgba(0,0,0,.5);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
 
@@ -27,7 +27,7 @@ header div.hero-banner {
   background-position: bottom;
 }
 
-section {
+section.catalog {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -37,7 +37,6 @@ section {
 img.book-cover {
   max-width: 100%;
   width: 250px;
- 
 }
 
 article.book-tile {
@@ -45,6 +44,7 @@ article.book-tile {
   width: 40%;
   box-shadow: 1px 1px 14px rgba(0, 0, 0, 0.2);
   padding: 1rem 1.5rem;
+  /* cursor: pointer; */
 }
 
 article.book-tile .description-modal {
@@ -70,7 +70,7 @@ article.book-tile.modal-open .description-modal {
 article.book-tile .close-modal-btn {
   align-self: flex-end;
   cursor: pointer;
-  padding: .3rem;
+  padding: 0.3rem;
 }
 article.book-tile button.show-more-btn {
   cursor: pointer;
@@ -78,4 +78,24 @@ article.book-tile button.show-more-btn {
 
 article.book-tile button.add-to-bag-btn {
   cursor: pointer;
+}
+
+section.bag {
+  background-color: rgb(153, 195, 211);
+  min-width: 200px;
+  /* height: 200px; */
+  padding: 1rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  /* transition: all 0.5s ease; */
+}
+
+section.bag h3 {
+  text-align: center;
+}
+
+section.bag .book-img {
+  width: 200px;
 }

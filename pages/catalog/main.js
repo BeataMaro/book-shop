@@ -1,15 +1,86 @@
 const body = document.body;
 const header = document.createElement("header");
 const main = document.createElement("main");
-const section = document.createElement("section");
+const catalogSection = document.createElement("section");
+catalogSection.classList.add("catalog");
+const bagSection = document.createElement("section");
 
 const pagePathname = window.location.pathname;
 
 body.appendChild(header);
 body.appendChild(main);
-main.appendChild(section);
+main.appendChild(catalogSection);
+main.appendChild(bagSection);
 
+const createEmptyBag = () => {
+  bagSection.classList.add("bag");
+  const bagTitle = document.createElement("h3");
+  bagTitle.textContent = "Bag";
+  bagSection.appendChild(bagTitle);
+  const emptyBag = document.createElement("span");
+  emptyBag.textContent = "Your bag is empty";
+  bagSection.appendChild(emptyBag);
+};
+createEmptyBag();
+
+//BAG
 let bag = [];
+
+const removeBookFromBag = (bookId) => {
+  bag = bag.filter((b) => b.id !== bookId);
+  reloadBag();
+};
+
+const reloadBag = () => {
+  if (bag.length === 0) {
+    bagSection.innerHTML = "";
+    createEmptyBag();
+  }
+  if (bag.length > 0) {
+    bagSection.innerHTML = "";
+    const bagTitle = document.createElement("h3");
+    bagTitle.textContent = "Order books";
+    bagSection.appendChild(bagTitle);
+    bag.map((book) => {
+      //Book cover image
+      const bookImg = document.createElement("img");
+      bookImg.setAttribute("src", book.imageLink);
+      bookImg.setAttribute("alt", `${book.title}-book image`);
+      bookImg.classList.add("book-img");
+
+      //Author
+      const bookAuthor = document.createElement("h4");
+      bookAuthor.textContent = book.author;
+
+      //Title
+      const bookTitle = document.createElement("h3");
+      bookTitle.textContent = book.title.toUpperCase();
+
+      //Price
+      const bookPrice = document.createElement("h5");
+      bookPrice.textContent = `Price: $${book.price}`;
+
+      //Remove book from bag button
+      const removeBookFromBagBtn = document.createElement("button");
+      removeBookFromBagBtn.setAttribute("type", "button");
+      removeBookFromBagBtn.innerText = "X";
+      removeBookFromBagBtn.classList.add("remove-from-bag-btn");
+      removeBookFromBagBtn.addEventListener("click", () =>
+        removeBookFromBag(book.id)
+      );
+
+      bagSection.appendChild(bookImg);
+      bagSection.appendChild(bookTitle);
+      bagSection.appendChild(bookAuthor);
+      bagSection.appendChild(bookPrice);
+      bagSection.appendChild(removeBookFromBagBtn);
+    });
+  }
+};
+const dragstart_handler = (ev) => {
+  ev.dataTransfer.dropEffect = "move";
+  ev.dataTransfer.setData("text/plain", ev.target.id);
+};
 
 export const getHeader = () => {
   const h1 = document.createElement("h1");
@@ -41,9 +112,10 @@ const getBooks = async () => {
     bookTile.classList.remove("modal-open");
   };
 
-  const addToBag = (book) => {
-    bag = [...bag, book];
-    console.log(bag)
+  const addBookToBag = (book, id) => {
+    const bookWithId = { ...book, id };
+    bag = [...bag, bookWithId];
+    reloadBag();
   };
 
   let books = await fetch("../../books.json")
@@ -55,6 +127,15 @@ const getBooks = async () => {
           "id",
           `${b.title.split("").slice(0, 4).join("")}-${idx}`
         );
+        bookTile.setAttribute("draggable", true);
+
+        window.addEventListener("DOMContentLoaded", () => {
+          // Get the element by id
+          const element = document.getElementById(bookTile.id);
+          // Add the ondragstart event listener
+          element.addEventListener("dragstart", dragstart_handler);
+        });
+
         const bookTileHeader = document.createElement("header");
 
         //Book cover image
@@ -80,7 +161,7 @@ const getBooks = async () => {
         addToBagBtn.setAttribute("type", "button");
         addToBagBtn.innerText = "Add to bag";
         addToBagBtn.classList.add("add-to-bag-btn");
-        addToBagBtn.addEventListener("click", () => addToBag(b));
+        addToBagBtn.addEventListener("click", () => addBookToBag(b, bookTile.id));
 
         //Show more button
         const showMore = document.createElement("button");
@@ -111,7 +192,7 @@ const getBooks = async () => {
         bookTile.append(addToBagBtn);
         bookTile.append(descriptionModal);
         bookTile.classList.add("book-tile");
-        section.appendChild(bookTile);
+        catalogSection.appendChild(bookTile);
       })
     );
 };
