@@ -1,3 +1,6 @@
+const fragment = new DocumentFragment();
+
+
 const body = document.body;
 const header = document.createElement("header");
 const main = document.createElement("main");
@@ -12,8 +15,29 @@ body.appendChild(main);
 main.appendChild(catalogSection);
 main.appendChild(bagSection);
 
+const dragstart_handler = (ev) => {
+  ev.dataTransfer.dropEffect = "move";
+  ev.dataTransfer.setData("text/plain", ev.target.id);
+  ev.dataTransfer.effectAllowed = "move";
+};
+
+function dragover_handler(ev) {
+  ev.preventDefault();
+  ev.dataTransfer.dropEffect = "move";
+}
+function drop_handler(ev) {
+  ev.preventDefault();
+  // Get the id of the target and add the moved element to the target's DOM
+  const data = ev.dataTransfer.getData("text/plain");
+  console.log(`data: ${data}`);
+  ev.target.appendChild(fragment.getElementById(data));
+}
+
 const createEmptyBag = () => {
   bagSection.classList.add("bag");
+  bagSection.setAttribute("id", "bag");
+  bagSection.setAttribute("ondrop", (event) => drop_handler(event));
+  bagSection.setAttribute("ondragover", (event) => dragover_handler(event));
   const bagTitle = document.createElement("h3");
   bagTitle.textContent = "Bag";
   bagSection.appendChild(bagTitle);
@@ -69,17 +93,22 @@ const reloadBag = () => {
         removeBookFromBag(book.id)
       );
 
+      //Confirm button
+      const linkToDeliveryForm = document.createElement('a');
+      linkToDeliveryForm.setAttribute("href", "../order-page");
+      const confirmOrderBtn = document.createElement("button");
+      confirmOrderBtn.setAttribute("type", "button");
+      confirmOrderBtn.innerText = "Confirm order";
+      linkToDeliveryForm.appendChild(confirmOrderBtn);
+
       bagSection.appendChild(bookImg);
       bagSection.appendChild(bookTitle);
       bagSection.appendChild(bookAuthor);
       bagSection.appendChild(bookPrice);
       bagSection.appendChild(removeBookFromBagBtn);
+      bagSection.appendChild(linkToDeliveryForm);
     });
   }
-};
-const dragstart_handler = (ev) => {
-  ev.dataTransfer.dropEffect = "move";
-  ev.dataTransfer.setData("text/plain", ev.target.id);
 };
 
 export const getHeader = () => {
@@ -128,13 +157,9 @@ const getBooks = async () => {
           `${b.title.split("").slice(0, 4).join("")}-${idx}`
         );
         bookTile.setAttribute("draggable", true);
-
-        window.addEventListener("DOMContentLoaded", () => {
-          // Get the element by id
-          const element = document.getElementById(bookTile.id);
-          // Add the ondragstart event listener
-          element.addEventListener("dragstart", dragstart_handler);
-        });
+        bookTile.setAttribute("ondragstart", (event) =>
+          dragstart_handler(event)
+        );
 
         const bookTileHeader = document.createElement("header");
 
@@ -161,7 +186,9 @@ const getBooks = async () => {
         addToBagBtn.setAttribute("type", "button");
         addToBagBtn.innerText = "Add to bag";
         addToBagBtn.classList.add("add-to-bag-btn");
-        addToBagBtn.addEventListener("click", () => addBookToBag(b, bookTile.id));
+        addToBagBtn.addEventListener("click", () =>
+          addBookToBag(b, bookTile.id)
+        );
 
         //Show more button
         const showMore = document.createElement("button");

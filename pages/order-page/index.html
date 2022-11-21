@@ -31,12 +31,89 @@
         id="surname"
         required
         aria-errormessage="err2"
-
       />
       <span id="err2" class="error-message">The field is invalid</span>
 
       <label for="delivery-date">Delivery date:</label>
-      <input type="date" name="delivery-date" id="delivery-date" required />
+      <input
+        type="date"
+        name="delivery-date"
+        id="delivery-date"
+        required
+        aria-errormessage="err3"
+      />
+      <span id="err3" class="error-message">The field is invalid</span>
+
+      <label for="street">Street:</label>
+      <input
+        type="text"
+        id="street"
+        minlength="5"
+        required
+        aria-errormessage="err4"
+      />
+      <span id="err4" class="error-message">The field is invalid</span>
+
+      <label for="houseNumber">House number:</label>
+      <input id="houseNumber" type="number" min="0" aria-errormessage="err5" />
+      <span id="err5" class="error-message">The field is invalid</span>
+
+      <label for="flatNumber">Flat number:</label>
+      <input type="text" required aria-errormessage="err6" />
+      <span id="err6" class="error-message">The field is invalid</span>
+
+      <!-- Payment method -->
+      <fieldset>
+        <legend>Payment method</legend>
+        <label>
+          <input
+            type="radio"
+            value="cash"
+            name="payment-method"
+            required
+            aria-errormessage="err7"
+          />
+          Cash
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="card"
+            name="payment-method"
+            required
+            aria-errormessage="err7"
+          />
+          Card</label
+        >
+        <span id="err7" class="error-message">The field is invalid</span>
+      </fieldset>
+      <fieldset>
+        <legend>Choose 2 gifts</legend>
+
+        <input
+          type="checkbox"
+          name="gift"
+          value="Pack as a gift"
+          id="packGift"
+        />
+        <label for="packGift">Pack as a gift</label>
+        <input type="checkbox" name="gift" value="Add postcard" id="postcard" />
+        <label for="postcard">Add postcard</label>
+        <input
+          type="checkbox"
+          name="gift"
+          value="Provide 2% discount to the next time"
+          id="discount"
+        />
+        <label for="discount">Provide 2% discount to the next time</label>
+        <input
+          type="checkbox"
+          name="gift"
+          value="Branded pen or pencil"
+          id="brandedGadget"
+        />
+        <label for="brandedGadget">Branded pen or pencil</label>
+      </fieldset>
 
       <button type="submit" class="complete-button" disabled>Complete</button>
     </form>

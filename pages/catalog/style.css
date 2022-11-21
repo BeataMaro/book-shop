@@ -83,12 +83,7 @@ article.book-tile button.add-to-bag-btn {
 section.bag {
   background-color: rgb(153, 195, 211);
   min-width: 200px;
-  /* height: 200px; */
   padding: 1rem;
-  position: absolute;
-  top: 0;
-  right: 0;
-  cursor: pointer;
   /* transition: all 0.5s ease; */
 }
 
