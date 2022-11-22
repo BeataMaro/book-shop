@@ -7,7 +7,7 @@
     <title>Order</title>
     <link rel="stylesheet" href="./style.css" />
     <script src="./main.js" type="module" defer></script>
-    <script src="../catalog/main.js" type="module" defer></script>
+    <!-- <script src="../catalog/main.js" type="module" defer></script> -->
   </head>
   <body>
     <form name="delivery-form" class="delivery-form" target="#" method="POST">
@@ -34,7 +34,7 @@
       />
       <span id="err2" class="error-message">The field is invalid</span>
 
-      <label for="delivery-date">Delivery date:</label>
+      <label for="delivery-date">Delivery date<span aria-label="required">*</span>:</label>
       <input
         type="date"
         name="delivery-date"
@@ -43,8 +43,7 @@
         aria-errormessage="err3"
       />
       <span id="err3" class="error-message">The field is invalid</span>
-
-      <label for="street">Street:</label>
+      <label for="street">Street<span aria-label="required">*</span>:</label>
       <input
         type="text"
         id="street"
@@ -54,17 +53,17 @@
       />
       <span id="err4" class="error-message">The field is invalid</span>
 
-      <label for="houseNumber">House number:</label>
-      <input id="houseNumber" type="number" min="0" aria-errormessage="err5" />
+      <label for="houseNumber">House number<span aria-label="required">*</span>:</label>
+      <input id="houseNumber" type="number" min="0" required aria-errormessage="err5" />
       <span id="err5" class="error-message">The field is invalid</span>
 
-      <label for="flatNumber">Flat number:</label>
+      <label for="flatNumber">Flat number<span aria-label="required">*</span>:</label>
       <input type="text" required aria-errormessage="err6" />
       <span id="err6" class="error-message">The field is invalid</span>
 
       <!-- Payment method -->
-      <fieldset>
-        <legend>Payment method</legend>
+      <fieldset required>
+        <legend>Payment method<span aria-label="required">*</span></legend>
         <label>
           <input
             type="radio"
@@ -87,9 +86,9 @@
         >
         <span id="err7" class="error-message">The field is invalid</span>
       </fieldset>
+      <!-- Gifts -->
       <fieldset>
         <legend>Choose 2 gifts</legend>
-
         <input
           type="checkbox"
           name="gift"
@@ -115,7 +114,7 @@
         <label for="brandedGadget">Branded pen or pencil</label>
       </fieldset>
 
-      <button type="submit" class="complete-button" disabled>Complete</button>
+      <button type="submit" class="complete-button">Complete</button>
     </form>
   </body>
 </html>

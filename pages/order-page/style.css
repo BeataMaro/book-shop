@@ -1,10 +1,17 @@
 @import "../catalog/style.css";
 
 form.delivery-form {
+  width: 50vw;
   padding: 2rem;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
+}
+
+form.delivery-form fieldset {
+  outline: none;
+  padding: 1rem;
 }
 
 form.delivery-form input {

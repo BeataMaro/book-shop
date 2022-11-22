@@ -1,6 +1,5 @@
 const fragment = new DocumentFragment();
 
-
 const body = document.body;
 const header = document.createElement("header");
 const main = document.createElement("main");
@@ -15,11 +14,23 @@ body.appendChild(main);
 main.appendChild(catalogSection);
 main.appendChild(bagSection);
 
-const dragstart_handler = (ev) => {
+function dragstart_handler(ev) {
+  // Add different types of drag data
+  ev.dataTransfer.setData("text/plain", ev.target.innerText);
+  ev.dataTransfer.setData("text/html", ev.target.outerHTML);
+  ev.dataTransfer.setData(
+    "text/uri-list",
+    ev.target.ownerDocument.location.href
+  );
   ev.dataTransfer.dropEffect = "move";
-  ev.dataTransfer.setData("text/plain", ev.target.id);
-  ev.dataTransfer.effectAllowed = "move";
-};
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  // Get the element by id
+  const element = document.getElementById("testBlock");
+  // Add the ondragstart event listener
+  element.addEventListener("dragstart", dragstart_handler);
+});
 
 function dragover_handler(ev) {
   ev.preventDefault();
@@ -29,21 +40,42 @@ function drop_handler(ev) {
   ev.preventDefault();
   // Get the id of the target and add the moved element to the target's DOM
   const data = ev.dataTransfer.getData("text/plain");
-  console.log(`data: ${data}`);
-  ev.target.appendChild(fragment.getElementById(data));
+  const coto = document.getElementById(data);
+  console.log(data);
+  // ev.target.appendChild(document.getElementById(data));
 }
 
+// const dragstart_handler = (ev) => {
+//   ev.dataTransfer.dropEffect = "move";
+//   ev.dataTransfer.setData("text/plain", ev.target.id);
+//   ev.dataTransfer.effectAllowed = "move";
+// };
+
+// function dragover_handler(ev) {
+//   ev.preventDefault();
+//   ev.dataTransfer.dropEffect = "move";
+// }
+// function drop_handler(ev) {
+//   ev.preventDefault();
+//   // Get the id of the target and add the moved element to the target's DOM
+//   const data = ev.dataTransfer.getData("text/plain");
+//   console.log(`data: ${data}`);
+//   ev.target.appendChild(fragment.getElementById(data));
+// }
+
 const createEmptyBag = () => {
+  const bagFragment = new DocumentFragment();
   bagSection.classList.add("bag");
   bagSection.setAttribute("id", "bag");
   bagSection.setAttribute("ondrop", (event) => drop_handler(event));
   bagSection.setAttribute("ondragover", (event) => dragover_handler(event));
   const bagTitle = document.createElement("h3");
   bagTitle.textContent = "Bag";
-  bagSection.appendChild(bagTitle);
+  bagFragment.appendChild(bagTitle);
   const emptyBag = document.createElement("span");
   emptyBag.textContent = "Your bag is empty";
-  bagSection.appendChild(emptyBag);
+  bagFragment.appendChild(emptyBag);
+  bagSection.appendChild(bagFragment);
 };
 createEmptyBag();
 
@@ -60,11 +92,32 @@ const reloadBag = () => {
     bagSection.innerHTML = "";
     createEmptyBag();
   }
-  if (bag.length > 0) {
+  if (bag.length > 0) {2
+    const bagFragment = new DocumentFragment;
     bagSection.innerHTML = "";
     const bagTitle = document.createElement("h3");
     bagTitle.textContent = "Order books";
-    bagSection.appendChild(bagTitle);
+    bagFragment.append(bagTitle);
+
+    //Total
+    const total = document.createElement("p");
+    const totalPrice =
+      bag.length === 1
+        ? `${bag[0].price}`
+        : bag.length > 1
+        ? bag.reduce((a, b) => a.price + b.price)
+        : null;
+    total.textContent = `Total: $${totalPrice}`;
+    bagFragment.appendChild(total);
+
+    //Confirm button
+    const linkToDeliveryForm = document.createElement("a");
+    linkToDeliveryForm.setAttribute("href", "../order-page");
+    const confirmOrderBtn = document.createElement("button");
+    confirmOrderBtn.setAttribute("type", "button");
+    confirmOrderBtn.innerText = "Confirm order";
+    linkToDeliveryForm.appendChild(confirmOrderBtn);
+
     bag.map((book) => {
       //Book cover image
       const bookImg = document.createElement("img");
@@ -93,25 +146,19 @@ const reloadBag = () => {
         removeBookFromBag(book.id)
       );
 
-      //Confirm button
-      const linkToDeliveryForm = document.createElement('a');
-      linkToDeliveryForm.setAttribute("href", "../order-page");
-      const confirmOrderBtn = document.createElement("button");
-      confirmOrderBtn.setAttribute("type", "button");
-      confirmOrderBtn.innerText = "Confirm order";
-      linkToDeliveryForm.appendChild(confirmOrderBtn);
-
-      bagSection.appendChild(bookImg);
-      bagSection.appendChild(bookTitle);
-      bagSection.appendChild(bookAuthor);
-      bagSection.appendChild(bookPrice);
-      bagSection.appendChild(removeBookFromBagBtn);
-      bagSection.appendChild(linkToDeliveryForm);
+      bagFragment.appendChild(bookImg);
+      bagFragment.appendChild(bookTitle);
+      bagFragment.appendChild(bookAuthor);
+      bagFragment.appendChild(bookPrice);
+      bagFragment.appendChild(removeBookFromBagBtn);
+      bagFragment.appendChild(linkToDeliveryForm);
+      bagSection.appendChild(bagFragment);
     });
   }
 };
 
 export const getHeader = () => {
+  const headerFragment = new DocumentFragment;
   const h1 = document.createElement("h1");
   h1.textContent = "Welcome to amazing Book Shop!";
   const h2 = document.createElement("h2");
@@ -124,9 +171,10 @@ export const getHeader = () => {
   const heroBanner = document.createElement("div");
   heroBanner.classList.add("hero-banner");
 
-  header.appendChild(heroBanner);
-  header.appendChild(h1);
-  header.appendChild(h2);
+  headerFragment.appendChild(heroBanner);
+  headerFragment.appendChild(h1);
+  headerFragment.appendChild(h2);
+  header.appendChild(headerFragment);
 };
 
 //FETCH BOOKS
@@ -152,6 +200,7 @@ const getBooks = async () => {
     .then((data) =>
       data.map((b, idx) => {
         const bookTile = document.createElement("article");
+        const booksFragment = new DocumentFragment();
         bookTile.setAttribute(
           "id",
           `${b.title.split("").slice(0, 4).join("")}-${idx}`
@@ -212,18 +261,18 @@ const getBooks = async () => {
         bookTileHeader.appendChild(author);
         bookTileHeader.appendChild(title);
         bookTileHeader.classList.add("book-tile-header");
-        bookTile.appendChild(bookTileHeader);
-        bookTile.append(bookCover);
-        bookTile.append(price);
-        bookTile.append(showMore);
-        bookTile.append(addToBagBtn);
-        bookTile.append(descriptionModal);
+        booksFragment.appendChild(bookTileHeader);
+        booksFragment.appendChild(bookCover);
+        booksFragment.appendChild(price);
+        booksFragment.appendChild(showMore);
+        booksFragment.appendChild(addToBagBtn);
+        booksFragment.appendChild(descriptionModal);
         bookTile.classList.add("book-tile");
+        bookTile.append(booksFragment);
         catalogSection.appendChild(bookTile);
       })
     );
 };
 
 getHeader();
-
 if (pagePathname.includes("catalog")) getBooks();

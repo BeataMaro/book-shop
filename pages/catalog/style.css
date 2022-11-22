@@ -94,3 +94,15 @@ section.bag h3 {
 section.bag .book-img {
   width: 200px;
 }
+
+.testBlock {
+  width: 100px;
+  height: 100px;
+  background-color: green;
+}
+
+.dragTarget {
+width: 400px;
+height: 400px;
+background-color: violet;
+}

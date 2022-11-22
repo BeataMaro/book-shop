@@ -1,6 +1,6 @@
-import { getHeader } from "../catalog/main.js";
+// import { getHeader } from "../catalog/main.js";
 
-getHeader();
+// getHeader();
 
 
 const deliveryForm = document.forms["delivery-form"]; //document.forms[0] or document.forms.deliveryForm
