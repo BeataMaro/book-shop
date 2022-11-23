@@ -25,13 +25,6 @@ function dragstart_handler(ev) {
   ev.dataTransfer.dropEffect = "move";
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  // Get the element by id
-  const element = document.getElementById("testBlock");
-  // Add the ondragstart event listener
-  element.addEventListener("dragstart", dragstart_handler);
-});
-
 function dragover_handler(ev) {
   ev.preventDefault();
   ev.dataTransfer.dropEffect = "move";
@@ -64,18 +57,17 @@ function drop_handler(ev) {
 // }
 
 const createEmptyBag = () => {
-  const bagFragment = new DocumentFragment();
   bagSection.classList.add("bag");
   bagSection.setAttribute("id", "bag");
   bagSection.setAttribute("ondrop", (event) => drop_handler(event));
   bagSection.setAttribute("ondragover", (event) => dragover_handler(event));
   const bagTitle = document.createElement("h3");
   bagTitle.textContent = "Bag";
-  bagFragment.appendChild(bagTitle);
+  bagSection.appendChild(bagTitle);
   const emptyBag = document.createElement("span");
   emptyBag.textContent = "Your bag is empty";
-  bagFragment.appendChild(emptyBag);
-  bagSection.appendChild(bagFragment);
+  bagSection.appendChild(emptyBag);
+  main.appendChild(bagSection);
 };
 createEmptyBag();
 
@@ -93,12 +85,10 @@ const reloadBag = () => {
     createEmptyBag();
   }
   if (bag.length > 0) {
-    2;
-    const bagFragment = new DocumentFragment();
     bagSection.innerHTML = "";
     const bagTitle = document.createElement("h3");
     bagTitle.textContent = "Order books";
-    bagFragment.append(bagTitle);
+    bagSection.append(bagTitle);
 
     //Total
     const total = document.createElement("p");
@@ -109,7 +99,7 @@ const reloadBag = () => {
         ? bag.reduce((a, b) => a.price + b.price)
         : null;
     total.textContent = `Total: $${totalPrice}`;
-    bagFragment.appendChild(total);
+    bagSection.appendChild(total);
 
     //Confirm button
     const linkToDeliveryForm = document.createElement("a");
@@ -147,19 +137,18 @@ const reloadBag = () => {
         removeBookFromBag(book.id)
       );
 
-      bagFragment.appendChild(bookImg);
-      bagFragment.appendChild(bookTitle);
-      bagFragment.appendChild(bookAuthor);
-      bagFragment.appendChild(bookPrice);
-      bagFragment.appendChild(removeBookFromBagBtn);
-      bagFragment.appendChild(linkToDeliveryForm);
-      bagSection.appendChild(bagFragment);
+      bagSection.appendChild(bookImg);
+      bagSection.appendChild(bookTitle);
+      bagSection.appendChild(bookAuthor);
+      bagSection.appendChild(bookPrice);
+      bagSection.appendChild(removeBookFromBagBtn);
+      bagSection.appendChild(linkToDeliveryForm);
+      main.appendChild(bagSection);
     });
   }
 };
 
 export const getHeader = () => {
-  const headerFragment = new DocumentFragment();
   const h1 = document.createElement("h1");
   h1.textContent = "Welcome to amazing Book Shop!";
   const h2 = document.createElement("h2");
@@ -172,10 +161,9 @@ export const getHeader = () => {
   const heroBanner = document.createElement("div");
   heroBanner.classList.add("hero-banner");
 
-  headerFragment.appendChild(heroBanner);
-  headerFragment.appendChild(h1);
-  headerFragment.appendChild(h2);
-  header.appendChild(headerFragment);
+  header.appendChild(heroBanner);
+  header.appendChild(h1);
+  header.appendChild(h2);
 };
 
 //FETCH BOOKS
@@ -201,7 +189,6 @@ const getBooks = async () => {
     .then((data) =>
       data.map((b, idx) => {
         const bookTile = document.createElement("article");
-        const booksFragment = new DocumentFragment();
         bookTile.setAttribute(
           "id",
           `${b.title.split("").slice(0, 4).join("")}-${idx}`
@@ -262,18 +249,22 @@ const getBooks = async () => {
         bookTileHeader.appendChild(author);
         bookTileHeader.appendChild(title);
         bookTileHeader.classList.add("book-tile-header");
-        booksFragment.appendChild(bookTileHeader);
-        booksFragment.appendChild(bookCover);
-        booksFragment.appendChild(price);
-        booksFragment.appendChild(showMore);
-        booksFragment.appendChild(addToBagBtn);
-        booksFragment.appendChild(descriptionModal);
+        bookTile.appendChild(bookTileHeader);
+        bookTile.appendChild(bookCover);
+        bookTile.appendChild(price);
+        bookTile.appendChild(showMore);
+        bookTile.appendChild(addToBagBtn);
+        bookTile.appendChild(descriptionModal);
         bookTile.classList.add("book-tile");
-        bookTile.append(booksFragment);
         catalogSection.appendChild(bookTile);
+        main.append(catalogSection);
       })
     );
 };
 
 getHeader();
 if (pagePathname.includes("catalog")) getBooks();
+
+fragment.appendChild(header);
+fragment.appendChild(main);
+body.appendChild(fragment);
