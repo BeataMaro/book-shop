@@ -92,8 +92,9 @@ const reloadBag = () => {
     bagSection.innerHTML = "";
     createEmptyBag();
   }
-  if (bag.length > 0) {2
-    const bagFragment = new DocumentFragment;
+  if (bag.length > 0) {
+    2;
+    const bagFragment = new DocumentFragment();
     bagSection.innerHTML = "";
     const bagTitle = document.createElement("h3");
     bagTitle.textContent = "Order books";
@@ -158,7 +159,7 @@ const reloadBag = () => {
 };
 
 export const getHeader = () => {
-  const headerFragment = new DocumentFragment;
+  const headerFragment = new DocumentFragment();
   const h1 = document.createElement("h1");
   h1.textContent = "Welcome to amazing Book Shop!";
   const h2 = document.createElement("h2");
