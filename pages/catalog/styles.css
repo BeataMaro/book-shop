@@ -44,7 +44,7 @@ article.book-tile {
   width: 40%;
   box-shadow: 1px 1px 14px rgba(0, 0, 0, 0.2);
   padding: 1rem 1.5rem;
-  /* cursor: pointer; */
+  cursor: move;
 }
 
 article.book-tile .description-modal {

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Order</title>
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./styles.css" />
     <script src="./main.js" type="module" defer></script>
     <!-- <script src="../catalog/main.js" type="module" defer></script> -->
   </head>
@@ -34,7 +34,9 @@
       />
       <span id="err2" class="error-message">The field is invalid</span>
 
-      <label for="delivery-date">Delivery date<span aria-label="required">*</span>:</label>
+      <label for="delivery-date"
+        >Delivery date<span aria-label="required">*</span>:</label
+      >
       <input
         type="date"
         name="delivery-date"
@@ -53,11 +55,21 @@
       />
       <span id="err4" class="error-message">The field is invalid</span>
 
-      <label for="houseNumber">House number<span aria-label="required">*</span>:</label>
-      <input id="houseNumber" type="number" min="0" required aria-errormessage="err5" />
+      <label for="houseNumber"
+        >House number<span aria-label="required">*</span>:</label
+      >
+      <input
+        id="houseNumber"
+        type="number"
+        min="0"
+        required
+        aria-errormessage="err5"
+      />
       <span id="err5" class="error-message">The field is invalid</span>
 
-      <label for="flatNumber">Flat number<span aria-label="required">*</span>:</label>
+      <label for="flatNumber"
+        >Flat number<span aria-label="required">*</span>:</label
+      >
       <input type="text" required aria-errormessage="err6" />
       <span id="err6" class="error-message">The field is invalid</span>
 

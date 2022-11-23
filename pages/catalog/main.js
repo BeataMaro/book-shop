@@ -14,53 +14,58 @@ body.appendChild(main);
 main.appendChild(catalogSection);
 main.appendChild(bagSection);
 
-function dragstart_handler(ev) {
-  // Add different types of drag data
-  ev.dataTransfer.setData("text/plain", ev.target.innerText);
-  ev.dataTransfer.setData("text/html", ev.target.outerHTML);
-  ev.dataTransfer.setData(
-    "text/uri-list",
-    ev.target.ownerDocument.location.href
-  );
-  ev.dataTransfer.dropEffect = "move";
+// ****
+function handleDrop(ev) {
+  addToBag(ev.dataTransfer.getData("text"));
 }
+
+function handleDragStart(ev) {
+  ev.dataTransfer.setData("text", ev.target.id);
+  ev.dataTransfer.effectAllowed = "copy";
+  const image = ev.target.querySelector("img").cloneNode();
+  image.style.width = "100px";
+  image.style.height = "150px";
+  image.style.transform = "translateX(-2000px)";
+  image.id = "temp";
+  document.body.appendChild(image);
+  ev.dataTransfer.setDragImage(image, -10, -10);
+}
+function handleDragEnd() {
+  document.body.removeChild(document.getElementById("temp"));
+}
+function handleAdd() {
+  addToBag(this.parentNode.parentNode.parentNode.id);
+}
+// *******
+const dragstart_handler = (ev) => {
+  console.log("nap");
+  ev.dataTransfer.setData("text", ev.target.id);
+  ev.dataTransfer.effectAllowed = "move";
+  const image = ev.target.querySelector("img").cloneNode();
+  image.style.width = "100px";
+  image.style.height = "150px";
+  image.style.transform = "translateX(-2000px)";
+  image.id = "temp";
+  document.body.appendChild(image);
+  ev.dataTransfer.setDragImage(image, -10, -10);
+};
 
 function dragover_handler(ev) {
   ev.preventDefault();
-  ev.dataTransfer.dropEffect = "move";
+  console.log("Drag over");
 }
 function drop_handler(ev) {
-  ev.preventDefault();
+  const draggedBook = ev.dataTransfer.getData("text");
+  console.log(draggedBook);
+  // addToBag(ev.dataTransfer.getData("text"));
   // Get the id of the target and add the moved element to the target's DOM
-  const data = ev.dataTransfer.getData("text/plain");
-  const coto = document.getElementById(data);
-  console.log(data);
-  // ev.target.appendChild(document.getElementById(data));
 }
-
-// const dragstart_handler = (ev) => {
-//   ev.dataTransfer.dropEffect = "move";
-//   ev.dataTransfer.setData("text/plain", ev.target.id);
-//   ev.dataTransfer.effectAllowed = "move";
-// };
-
-// function dragover_handler(ev) {
-//   ev.preventDefault();
-//   ev.dataTransfer.dropEffect = "move";
-// }
-// function drop_handler(ev) {
-//   ev.preventDefault();
-//   // Get the id of the target and add the moved element to the target's DOM
-//   const data = ev.dataTransfer.getData("text/plain");
-//   console.log(`data: ${data}`);
-//   ev.target.appendChild(fragment.getElementById(data));
-// }
 
 const createEmptyBag = () => {
   bagSection.classList.add("bag");
   bagSection.setAttribute("id", "bag");
-  bagSection.setAttribute("ondrop", (event) => drop_handler(event));
-  bagSection.setAttribute("ondragover", (event) => dragover_handler(event));
+  bagSection.addEventListener("drop", (event) => drop_handler(event));
+  bagSection.addEventListener("dragover", (event) => dragover_handler(event));
   const bagTitle = document.createElement("h3");
   bagTitle.textContent = "Bag";
   bagSection.appendChild(bagTitle);
@@ -91,15 +96,24 @@ const reloadBag = () => {
     bagSection.append(bagTitle);
 
     //Total
+    const getTotal = () => {
+      const getTotalPrice = bag.reduce((acc, obj) => {
+        return acc + obj.price;
+      }, 0);
+      return getTotalPrice;
+    };
+
     const total = document.createElement("p");
-    const totalPrice =
-      bag.length === 1
-        ? `${bag[0].price}`
-        : bag.length > 1
-        ? bag.reduce((a, b) => a.price + b.price)
-        : null;
+    const totalPrice = bag.length === 1 ? `${bag[0].price}` : getTotal();
+
     total.textContent = `Total: $${totalPrice}`;
     bagSection.appendChild(total);
+
+    //Pieces
+
+    const amount = 1;
+    const pieces = document.createElement("span");
+    pieces.textContent = `Pieces: ${amount}`;
 
     //Confirm button
     const linkToDeliveryForm = document.createElement("a");
@@ -141,9 +155,10 @@ const reloadBag = () => {
       bagSection.appendChild(bookTitle);
       bagSection.appendChild(bookAuthor);
       bagSection.appendChild(bookPrice);
+      bagSection.appendChild(pieces);
       bagSection.appendChild(removeBookFromBagBtn);
       bagSection.appendChild(linkToDeliveryForm);
-      main.appendChild(bagSection);
+      main.prepend(bagSection);
     });
   }
 };
@@ -194,7 +209,7 @@ const getBooks = async () => {
           `${b.title.split("").slice(0, 4).join("")}-${idx}`
         );
         bookTile.setAttribute("draggable", true);
-        bookTile.setAttribute("ondragstart", (event) =>
+        bookTile.addEventListener("dragstart", (event) =>
           dragstart_handler(event)
         );
 
@@ -204,6 +219,7 @@ const getBooks = async () => {
         const bookCover = document.createElement("img");
         bookCover.setAttribute("src", b.imageLink);
         bookCover.setAttribute("alt", `${b.title}-book cover`);
+        bookCover.draggable = false;
         bookCover.classList.add("book-cover");
 
         //Author
