@@ -27,6 +27,9 @@ form.delivery-form small.error-message {
   color: #d23c3c;
 }
 
+form.delivery-form input:valid ~ small.error-message {
+  visibility: hidden;
+}
 form.delivery-form input:invalid ~ small.error-message {
   visibility: visible;
 }

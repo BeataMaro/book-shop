@@ -72,7 +72,12 @@
       <label for="flatNumber"
         >Flat number<span aria-label="required">*</span>:</label
       >
-      <input type="text" name="flatNumber" required aria-errormessage="err6" />
+      <input
+        type="number"
+        name="flatNumber"
+        required
+        aria-errormessage="err6"
+      />
       <small id="err6" class="error-message">The field is invalid</small>
 
       <!-- Payment method -->
@@ -129,7 +134,12 @@
         <label for="brandedGadget">Branded pen or pencil</label>
       </fieldset>
 
-      <button type="submit" class="complete-button" disabled>Complete</button>
+      <button type="submit" class="complete-button" id="button-send-form">
+        Complete
+      </button>
+      <button type="reset" class="reset-button" id="button-reset-form">
+        Clear form
+      </button>
     </form>
   </body>
 </html>
