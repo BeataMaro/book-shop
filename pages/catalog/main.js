@@ -1,5 +1,4 @@
 const fragment = new DocumentFragment();
-
 const body = document.body;
 const header = document.createElement("header");
 const main = document.createElement("main");
@@ -10,6 +9,7 @@ const bagIconContainer = document.createElement("aside");
 bagIconContainer.className = "bag-icon-container";
 const total = document.createElement("p");
 total.className = "total";
+let allBooks = [];
 
 const pagePathname = window.location.pathname;
 
@@ -45,8 +45,18 @@ function dragover_handler(ev) {
 function drop_handler(ev) {
   const draggedBookId = ev.dataTransfer.getData("text");
   console.log(draggedBookId);
-  // addToBag(ev.dataTransfer.getData("text"));
-  // Get the id of the target and add the moved element to the target's DOM
+
+  allBooks = allBooks.map((b, idx) => ({
+    ...b,
+    id: `${b.title.split("").slice(0, 4).join("")}-${idx}`,
+  }));
+  console.log(allBooks);
+  const chosenBook = allBooks.find((book) => book.id === draggedBookId);
+  console.log(chosenBook);
+  bag = [...bag, chosenBook];
+  console.log(bag);
+  reloadBag();
+  total.textContent = `Total: $${getTotal()}`;
 }
 //BAG
 let bag = [];
@@ -264,19 +274,21 @@ const getBooks = async () => {
     if (alreadyExist) {
       const multi = bag.find((book) => book.id === id);
       multi.amount++;
-      getTotal();
+      total.textContent = `Total: $${getTotal()}`;
     } else {
       const bookWithId = { ...book, id, amount };
       bag = [...bag, bookWithId];
-      getTotal();
+      total.textContent = `Total: $${getTotal()}`;
     }
     reloadBag();
   };
 
-  let books = await fetch("../../books.json")
+  let booksJson = await fetch("../../books.json")
     .then((res) => res.json())
     .then((data) =>
       data.map((b, idx) => {
+        allBooks.push(b);
+        console.log(allBooks);
         const bookTile = document.createElement("article");
         bookTile.setAttribute(
           "id",

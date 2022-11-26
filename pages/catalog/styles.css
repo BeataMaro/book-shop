@@ -72,11 +72,17 @@ aside.bag-icon-container {
   background-color: rgb(21, 14, 40);
   border-radius: .5rem 0 0 .5rem;
   z-index: 10;
+  cursor: pointer;
+}
+
+aside.bag-icon-container:hover i.material-symbols-outlined {
+  color: rgb(90, 146, 90);;
 }
 
 aside.bag-icon-container > i.material-symbols-outlined {
   font-size: 3rem;
   color: rgb(188, 200, 214);
+  transition: all .2s linear;
 }
 
 section.bag h3 {
