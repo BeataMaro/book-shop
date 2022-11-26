@@ -19,12 +19,119 @@ body.modal-open {
 }
 
 header div.hero-banner {
-  width: 100vw;
   height: 80vh;
   background-image: url("../../assets/images/christian-burri-unsplash.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: bottom;
+  position: relative;
+}
+header div.hero-banner h1 {
+  position: absolute;
+  top: 50%;
+  color: white;
+}
+
+section.bag {
+  position:fixed;
+  top: 0;
+  right: -100%;
+  text-align: center;
+  background-color: rgb(153, 195, 211);
+  padding: 1rem;
+  transition: all 2s ease-in-out;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+section.bag .books-wrapper {
+display: flex;
+justify-content: space-around;
+align-items: center;
+gap: 1rem;
+
+}
+
+section.bag .book-wrapper {
+  background-color: whitesmoke;
+  border: .5px solid rgb(93, 92, 92);
+  padding: 2rem;
+}
+
+section.empty-bag {
+  display: grid;
+  place-items: center;
+  padding-right: 5rem;
+}
+
+aside.bag-icon-container {
+  position: fixed;
+  top: 50%;
+  right:0;
+  background-color: rgb(21, 14, 40);
+  border-radius: .5rem 0 0 .5rem;
+  z-index: 10;
+}
+
+aside.bag-icon-container > i.material-symbols-outlined {
+  font-size: 3rem;
+  color: rgb(188, 200, 214);
+}
+
+section.bag h3 {
+  font-size: 1rem;
+  overflow-wrap: break-word;
+}
+
+section.bag .book-img {
+  width: 100px;
+}
+
+section.bag i.remove-from-bag-btn {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+section.bag .summary .confirm-order-btn {
+  cursor: pointer;
+  padding: .8rem;
+  margin-top: 2rem;
+  border-radius: 5rem;
+  background-color: rgb(46, 75, 46);
+  color: rgb(212, 245, 218);
+  outline: 0;
+  border: none;
+  letter-spacing: 2px;
+  transition: all .1s linear;
+}
+
+section.bag .confirm-order-btn:hover {
+  background-color: rgb(90, 146, 90);
+  color: white;
+  box-shadow: 1px 2px 12px rgba(0, 0, 0, .2);
+
+}
+
+section.bag .confirm-order-btn:disabled {
+  background-color: grey;
+}
+
+section.bag .confirm-order-btn:disabled:hover {
+  background-color: grey;
+  box-shadow: none;
+  color: rgb(212, 245, 218);
+  cursor: not-allowed;
+}
+
+
+
+section.bag.expand {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  opacity: 1;
+  overflow: hidden scroll;
 }
 
 section.catalog {
@@ -34,15 +141,24 @@ section.catalog {
   gap: 2rem;
 }
 
+section.catalog .catalog-title {
+  flex-basis: 100%;
+  text-align: center;
+}
+
 img.book-cover {
   max-width: 100%;
   width: 250px;
 }
 
 article.book-tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   border-radius: 6px;
   width: 40%;
-  box-shadow: 1px 1px 14px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 14px rgba(76, 188, 167, 0.5);
   padding: 1rem 1.5rem;
   cursor: move;
 }
@@ -55,7 +171,7 @@ article.book-tile .description-modal {
   width: 50vw;
   padding: 1rem 2rem;
   border-radius: 6px;
-  background-color: khaki;
+  background-color: rgb(68, 154, 128);
   visibility: hidden;
   display: flex;
   flex-direction: column;
@@ -80,29 +196,4 @@ article.book-tile button.add-to-bag-btn {
   cursor: pointer;
 }
 
-section.bag {
-  background-color: rgb(153, 195, 211);
-  min-width: 200px;
-  padding: 1rem;
-  /* transition: all 0.5s ease; */
-}
 
-section.bag h3 {
-  text-align: center;
-}
-
-section.bag .book-img {
-  width: 200px;
-}
-
-.testBlock {
-  width: 100px;
-  height: 100px;
-  background-color: green;
-}
-
-.dragTarget {
-width: 400px;
-height: 400px;
-background-color: violet;
-}

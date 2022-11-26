@@ -22,11 +22,11 @@ form.delivery-form input:invalid {
   border: 1px solid #d23c3c;
 }
 
-form.delivery-form span.error-message {
+form.delivery-form small.error-message {
   visibility: hidden;
   color: #d23c3c;
 }
 
-form.delivery-form input:invalid ~ span.error-message {
+form.delivery-form input:invalid ~ small.error-message {
   visibility: visible;
 }

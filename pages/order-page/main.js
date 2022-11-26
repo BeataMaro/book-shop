@@ -2,8 +2,10 @@
 
 // getHeader();
 
-
 const deliveryForm = document.forms["delivery-form"]; //document.forms[0] or document.forms.deliveryForm
+//form data
+const firstname = deliveryForm["firstname"].value;
+const surname = deliveryForm["surname"];
 const dateInput = deliveryForm["delivery-date"];
 
 console.log(dateInput.form);
@@ -12,8 +14,9 @@ deliveryForm.onsubmit = (e) => {
   e.preventDefault();
 
   console.log(deliveryForm.surname.value); //deliveryForm.elements.surname.value
-  
 };
+
+const showSummary = () => {};
 
 const ValidateGiftSelection = () => {
   const checkboxes = document.getElementsByName("gift");
@@ -23,8 +26,7 @@ const ValidateGiftSelection = () => {
     check.addEventListener("click", () => {
       if (check.checked) numberOfCheckedItems++;
       if (numberOfCheckedItems > 2) alert("Choose only 2 gifts");
-    })
+    });
   });
 };
 ValidateGiftSelection();
-

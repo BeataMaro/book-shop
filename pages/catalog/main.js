@@ -6,6 +6,10 @@ const main = document.createElement("main");
 const catalogSection = document.createElement("section");
 catalogSection.classList.add("catalog");
 const bagSection = document.createElement("section");
+const bagIconContainer = document.createElement("aside");
+bagIconContainer.className = "bag-icon-container";
+const total = document.createElement("p");
+total.className = "total";
 
 const pagePathname = window.location.pathname;
 
@@ -14,29 +18,13 @@ body.appendChild(main);
 main.appendChild(catalogSection);
 main.appendChild(bagSection);
 
-// ****
-function handleDrop(ev) {
-  addToBag(ev.dataTransfer.getData("text"));
-}
+const toggleBag = () => {
+  bagSection.classList.toggle("expand");
+  if (bag.length < 2) bagSection.style.overflowY = "hidden";
+};
 
-function handleDragStart(ev) {
-  ev.dataTransfer.setData("text", ev.target.id);
-  ev.dataTransfer.effectAllowed = "copy";
-  const image = ev.target.querySelector("img").cloneNode();
-  image.style.width = "100px";
-  image.style.height = "150px";
-  image.style.transform = "translateX(-2000px)";
-  image.id = "temp";
-  document.body.appendChild(image);
-  ev.dataTransfer.setDragImage(image, -10, -10);
-}
-function handleDragEnd() {
-  document.body.removeChild(document.getElementById("temp"));
-}
-function handleAdd() {
-  addToBag(this.parentNode.parentNode.parentNode.id);
-}
-// *******
+bagIconContainer.addEventListener("click", toggleBag);
+
 const dragstart_handler = (ev) => {
   console.log("nap");
   ev.dataTransfer.setData("text", ev.target.id);
@@ -55,14 +43,38 @@ function dragover_handler(ev) {
   console.log("Drag over");
 }
 function drop_handler(ev) {
-  const draggedBook = ev.dataTransfer.getData("text");
-  console.log(draggedBook);
+  const draggedBookId = ev.dataTransfer.getData("text");
+  console.log(draggedBookId);
   // addToBag(ev.dataTransfer.getData("text"));
   // Get the id of the target and add the moved element to the target's DOM
 }
+//BAG
+let bag = [];
+
+const createBagIcon = () => {
+  const icon = document.createElement("i");
+  icon.className = "material-symbols-outlined";
+  icon.textContent = "shopping_bag";
+  bagIconContainer.appendChild(icon);
+  bagIconContainer.addEventListener("dragover", (event) =>
+    dragover_handler(event)
+  );
+  bagIconContainer.addEventListener("drop", (event) => drop_handler(event));
+  main.appendChild(bagIconContainer);
+};
+
+createBagIcon();
+
+//Total
+const getTotal = () => {
+  const getTotalPrice = bag.reduce((acc, obj) => {
+    return acc + obj.price * obj.amount;
+  }, 0);
+  return getTotalPrice;
+};
 
 const createEmptyBag = () => {
-  bagSection.classList.add("bag");
+  bagSection.classList.add("bag", "empty-bag");
   bagSection.setAttribute("id", "bag");
   bagSection.addEventListener("drop", (event) => drop_handler(event));
   bagSection.addEventListener("dragover", (event) => dragover_handler(event));
@@ -70,118 +82,164 @@ const createEmptyBag = () => {
   bagTitle.textContent = "Bag";
   bagSection.appendChild(bagTitle);
   const emptyBag = document.createElement("span");
-  emptyBag.textContent = "Your bag is empty";
+  emptyBag.textContent = "Your bag is empty.";
+  const summary = document.createElement("div");
+  summary.className = "summary";
+  total.textContent = `Total: $${getTotal()}`;
+  summary.appendChild(total);
   bagSection.appendChild(emptyBag);
+  bagSection.appendChild(summary);
   main.appendChild(bagSection);
 };
 createEmptyBag();
-
-//BAG
-let bag = [];
 
 const removeBookFromBag = (bookId) => {
   bag = bag.filter((b) => b.id !== bookId);
   reloadBag();
 };
 
+//Confirm button
+const linkToDeliveryForm = document.createElement("a");
+linkToDeliveryForm.setAttribute("href", "../order-page");
+const confirmOrderBtn = document.createElement("button");
+confirmOrderBtn.setAttribute("type", "button");
+confirmOrderBtn.className = "confirm-order-btn";
+confirmOrderBtn.innerText = "Confirm order";
+linkToDeliveryForm.appendChild(confirmOrderBtn);
+const summary = document.createElement("div");
+summary.className = "summary";
+summary.appendChild(total);
+summary.appendChild(linkToDeliveryForm);
+
 const reloadBag = () => {
   if (bag.length === 0) {
     bagSection.innerHTML = "";
+    confirmOrderBtn.disabled = true;
     createEmptyBag();
   }
   if (bag.length > 0) {
     bagSection.innerHTML = "";
+    bagSection.classList.remove("empty-bag");
+    confirmOrderBtn.disabled = false;
     const bagTitle = document.createElement("h3");
     bagTitle.textContent = "Order books";
     bagSection.append(bagTitle);
+  }
+  if (bag.length === 1) {
+    const totalPrice = bag[0].price * bag[0].amount;
+    total.textContent = `Total: $${totalPrice}`;
+  }
 
-    //Total
-    const getTotal = () => {
-      const getTotalPrice = bag.reduce((acc, obj) => {
-        return acc + obj.price;
-      }, 0);
-      return getTotalPrice;
+  if (bag.length > 1) {
+    total.textContent = `Total: $${getTotal()}`;
+  }
+
+  //books wrapper
+
+  const booksWrapper = document.createElement("div");
+  booksWrapper.className = "books-wrapper";
+
+  bag.map((book) => {
+    //Single book wrapper
+    const bookWrapper = document.createElement("div");
+    bookWrapper.className = "book-wrapper";
+
+    //Book cover image
+    const bookImg = document.createElement("img");
+    bookImg.setAttribute("src", book.imageLink);
+    bookImg.setAttribute("alt", `${book.title}-book image`);
+    bookImg.classList.add("book-img");
+
+    //Author
+    const bookAuthor = document.createElement("h4");
+    bookAuthor.textContent = book.author;
+
+    //Title
+    const bookTitle = document.createElement("h3");
+    bookTitle.textContent = book.title.toUpperCase();
+
+    //Price
+    const bookPrice = document.createElement("h5");
+    bookPrice.textContent = `Price: $${book.price}`;
+
+    //Amount
+
+    const bookAmountContainer = document.createElement("div");
+    bookAmountContainer.className = "book-amount-container";
+    const bookAmount = document.createElement("span");
+    bookAmount.textContent = `Pieces: ${book.amount}`;
+
+    const changeAmount = (id, action) => {
+      const book = bag.find((book) => book.id === id);
+      switch (action) {
+        case "plus":
+          total.textContent = `Total: $${getTotal()}`;
+          return (bookAmount.textContent = `Pieces: ${book.amount++}`);
+
+        case "minus":
+          total.textContent = `Total: $${getTotal()}`;
+          if (book.amount > 0)
+            return (bookAmount.textContent = `Pieces: ${book.amount--}`);
+      }
     };
 
-    const total = document.createElement("p");
-    const totalPrice = bag.length === 1 ? `${bag[0].price}` : getTotal();
+    const plusBtn = document.createElement("button");
+    plusBtn.innerText = "+";
+    plusBtn.addEventListener("click", () => changeAmount(book.id, "plus"));
+    const minusBtn = document.createElement("button");
+    minusBtn.innerText = "-";
+    minusBtn.addEventListener("click", () => changeAmount(book.id, "minus"));
+    bookAmountContainer.appendChild(minusBtn);
+    bookAmountContainer.appendChild(bookAmount);
+    bookAmountContainer.appendChild(plusBtn);
 
-    total.textContent = `Total: $${totalPrice}`;
-    bagSection.appendChild(total);
+    //Remove book from bag button
+    const removeBookFromBagBtn = document.createElement("i");
+    removeBookFromBagBtn.innerText = "delete";
+    removeBookFromBagBtn.classList.add(
+      "material-symbols-outlined",
+      "remove-from-bag-btn"
+    );
+    removeBookFromBagBtn.addEventListener("click", () =>
+      removeBookFromBag(book.id)
+    );
 
-    //Pieces
-
-    const amount = 1;
-    const pieces = document.createElement("span");
-    pieces.textContent = `Pieces: ${amount}`;
-
-    //Confirm button
-    const linkToDeliveryForm = document.createElement("a");
-    linkToDeliveryForm.setAttribute("href", "../order-page");
-    const confirmOrderBtn = document.createElement("button");
-    confirmOrderBtn.setAttribute("type", "button");
-    confirmOrderBtn.innerText = "Confirm order";
-    linkToDeliveryForm.appendChild(confirmOrderBtn);
-
-    bag.map((book) => {
-      //Book cover image
-      const bookImg = document.createElement("img");
-      bookImg.setAttribute("src", book.imageLink);
-      bookImg.setAttribute("alt", `${book.title}-book image`);
-      bookImg.classList.add("book-img");
-
-      //Author
-      const bookAuthor = document.createElement("h4");
-      bookAuthor.textContent = book.author;
-
-      //Title
-      const bookTitle = document.createElement("h3");
-      bookTitle.textContent = book.title.toUpperCase();
-
-      //Price
-      const bookPrice = document.createElement("h5");
-      bookPrice.textContent = `Price: $${book.price}`;
-
-      //Remove book from bag button
-      const removeBookFromBagBtn = document.createElement("button");
-      removeBookFromBagBtn.setAttribute("type", "button");
-      removeBookFromBagBtn.innerText = "X";
-      removeBookFromBagBtn.classList.add("remove-from-bag-btn");
-      removeBookFromBagBtn.addEventListener("click", () =>
-        removeBookFromBag(book.id)
-      );
-
-      bagSection.appendChild(bookImg);
-      bagSection.appendChild(bookTitle);
-      bagSection.appendChild(bookAuthor);
-      bagSection.appendChild(bookPrice);
-      bagSection.appendChild(pieces);
-      bagSection.appendChild(removeBookFromBagBtn);
-      bagSection.appendChild(linkToDeliveryForm);
-      main.prepend(bagSection);
-    });
-  }
+    bookWrapper.appendChild(bookImg);
+    bookWrapper.appendChild(bookTitle);
+    bookWrapper.appendChild(bookAuthor);
+    bookWrapper.appendChild(bookPrice);
+    bookWrapper.appendChild(bookAmountContainer);
+    bookWrapper.appendChild(removeBookFromBagBtn);
+    booksWrapper.appendChild(bookWrapper);
+  });
+  bagSection.appendChild(booksWrapper);
+  bagSection.appendChild(summary);
+  main.append(bagSection);
 };
 
 export const getHeader = () => {
   const h1 = document.createElement("h1");
   h1.textContent = "Welcome to amazing Book Shop!";
-  const h2 = document.createElement("h2");
-  const subtitle = pagePathname.includes("catalog")
-    ? "Book Catalog"
-    : pagePathname.includes("order")
-    ? "Order"
-    : "";
-  h2.textContent = subtitle;
   const heroBanner = document.createElement("div");
   heroBanner.classList.add("hero-banner");
 
   header.appendChild(heroBanner);
   header.appendChild(h1);
-  header.appendChild(h2);
 };
 
 //FETCH BOOKS
+
+const catalogTitle = document.createElement("h2");
+const subtitle = pagePathname.includes("catalog")
+  ? "Book Catalog"
+  : pagePathname.includes("order")
+  ? "Order"
+  : "";
+catalogTitle.textContent = subtitle;
+catalogTitle.className = "catalog-title";
+
+catalogSection.appendChild(catalogTitle);
+
 const getBooks = async () => {
   const openModal = (bookTile) => {
     bookTile.classList.toggle("modal-open");
@@ -193,9 +251,25 @@ const getBooks = async () => {
     bookTile.classList.remove("modal-open");
   };
 
+  const fadeBag = () => {
+    const showBag = setTimeout(() => {
+      bagSection.classList.add("expand");
+    }, 500);
+    clearTimeout(showBag);
+  };
+  let amount = 1;
+
   const addBookToBag = (book, id) => {
-    const bookWithId = { ...book, id };
-    bag = [...bag, bookWithId];
+    const alreadyExist = bag.some((book) => book.id === id);
+    if (alreadyExist) {
+      const multi = bag.find((book) => book.id === id);
+      multi.amount++;
+      getTotal();
+    } else {
+      const bookWithId = { ...book, id, amount };
+      bag = [...bag, bookWithId];
+      getTotal();
+    }
     reloadBag();
   };
 
@@ -242,6 +316,7 @@ const getBooks = async () => {
         addToBagBtn.addEventListener("click", () =>
           addBookToBag(b, bookTile.id)
         );
+        addToBagBtn.addEventListener("click", fadeBag);
 
         //Show more button
         const showMore = document.createElement("button");

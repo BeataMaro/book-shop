@@ -21,7 +21,7 @@
         required
         aria-errormessage="err1"
       />
-      <span id="err1" class="error-message">The field is invalid</span>
+      <small id="err1" class="error-message">The field is invalid</small>
       <label for="surname">Surname<span aria-label="required">*</span></label>
       <input
         type="text"
@@ -32,7 +32,7 @@
         required
         aria-errormessage="err2"
       />
-      <span id="err2" class="error-message">The field is invalid</span>
+      <small id="err2" class="error-message">The field is invalid</small>
 
       <label for="delivery-date"
         >Delivery date<span aria-label="required">*</span>:</label
@@ -44,34 +44,36 @@
         required
         aria-errormessage="err3"
       />
-      <span id="err3" class="error-message">The field is invalid</span>
+      <small id="err3" class="error-message">The field is invalid</small>
       <label for="street">Street<span aria-label="required">*</span>:</label>
       <input
         type="text"
+        name="street"
         id="street"
         minlength="5"
         required
         aria-errormessage="err4"
       />
-      <span id="err4" class="error-message">The field is invalid</span>
+      <small id="err4" class="error-message">The field is invalid</small>
 
       <label for="houseNumber"
         >House number<span aria-label="required">*</span>:</label
       >
       <input
         id="houseNumber"
+        name="houseNumber"
         type="number"
         min="0"
         required
         aria-errormessage="err5"
       />
-      <span id="err5" class="error-message">The field is invalid</span>
+      <small id="err5" class="error-message">The field is invalid</small>
 
       <label for="flatNumber"
         >Flat number<span aria-label="required">*</span>:</label
       >
-      <input type="text" required aria-errormessage="err6" />
-      <span id="err6" class="error-message">The field is invalid</span>
+      <input type="text" name="flatNumber" required aria-errormessage="err6" />
+      <small id="err6" class="error-message">The field is invalid</small>
 
       <!-- Payment method -->
       <fieldset required>
@@ -93,10 +95,11 @@
             name="payment-method"
             required
             aria-errormessage="err7"
+            checked
           />
           Card</label
         >
-        <span id="err7" class="error-message">The field is invalid</span>
+        <small id="err7" class="error-message">The field is invalid</small>
       </fieldset>
       <!-- Gifts -->
       <fieldset>
@@ -126,7 +129,7 @@
         <label for="brandedGadget">Branded pen or pencil</label>
       </fieldset>
 
-      <button type="submit" class="complete-button">Complete</button>
+      <button type="submit" class="complete-button" disabled>Complete</button>
     </form>
   </body>
 </html>
