@@ -14,6 +14,12 @@ const flatNumber = deliveryForm.flatNumber;
 const paymentMethod = deliveryForm["payment-method"];
 const submittedData = {};
 
+const today = new Date();
+const tomorrow = `${today.getFullYear()}-${today.getMonth() + 1}-${
+  today.getDate() + 1
+}`;
+dateInput.setAttribute("min", tomorrow);
+
 //Validation rules
 
 const longEnough = (val, num) => val >= num;
