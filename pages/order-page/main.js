@@ -19,7 +19,7 @@ const tomorrow = `${today.getFullYear()}-${today.getMonth() + 1}-${
   today.getDate() + 1
 }`;
 dateInput.setAttribute("min", tomorrow);
-
+console.log(new Date(dateInput.value));
 //Validation rules
 
 const longEnough = (val, num) => val >= num;
@@ -93,6 +93,15 @@ const validateForm = () => {
     street.classList.add("incorrect");
     submitButton.disabled = true;
   }
+  if (new Date(dateInput.value) == "Invalid Date") {
+    dateInput.classList.remove("correct");
+    dateInput.classList.add("incorrect");
+    submitButton.disabled = true;
+  } else {
+    dateInput.classList.remove("incorrect");
+    dateInput.classList.add("correct");
+    submitButton.disabled = false;
+  }
 };
 
 inputs.forEach((field) => field.addEventListener("blur", validateForm));
@@ -114,6 +123,7 @@ const closeSummary = () => {
 
 const showSummary = async () => {
   deliveryForm.reset();
+  submitButton.disabled = true;
 
   const summaryInfo = document.createElement("div");
   summaryInfo.className = "summary-container";
@@ -148,5 +158,3 @@ const ValidateGiftSelection = () => {
   });
 };
 ValidateGiftSelection();
-
-// submitButton.addEventListener("click", validateForm())
