@@ -16,7 +16,6 @@
       <input
         type="text"
         name="firstname"
-        minlength="4"
         id="name"
         placeholder="Name"
         required
@@ -27,7 +26,6 @@
       <input
         type="text"
         name="surname"
-        minlength="5"
         placeholder="Surname"
         id="surname"
         required
@@ -64,7 +62,7 @@
         id="houseNumber"
         name="houseNumber"
         type="number"
-        min="0"
+        min="1"
         required
         aria-errormessage="err5"
       />
@@ -73,12 +71,7 @@
       <label for="flatNumber"
         >Flat number<span aria-label="required">*</span>:</label
       >
-      <input
-        type="number"
-        name="flatNumber"
-        required
-        aria-errormessage="err6"
-      />
+      <input type="text" name="flatNumber" required aria-errormessage="err6" />
       <small id="err6" class="error-message">The field is invalid</small>
 
       <!-- Payment method -->
@@ -135,7 +128,12 @@
         <label for="brandedGadget">Branded pen or pencil</label>
       </fieldset>
 
-      <button type="submit" class="complete-button" id="button-send-form">
+      <button
+        type="submit"
+        class="complete-button"
+        id="button-send-form"
+        disabled
+      >
         Complete
       </button>
       <button type="reset" class="reset-button" id="button-reset-form">

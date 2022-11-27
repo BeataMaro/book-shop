@@ -5,29 +5,72 @@ const inputs = document.querySelectorAll(
 );
 const submitButton = document.getElementById("button-send-form");
 //form data
-const firstname = deliveryForm["firstname"].value;
+const firstname = deliveryForm["firstname"];
 const surname = deliveryForm["surname"];
 const dateInput = deliveryForm["delivery-date"];
+const street = deliveryForm.street;
+const houseNumber = deliveryForm.houseNumber;
+const flatNumber = deliveryForm.flatNumber;
+const paymentMethod = deliveryForm["payment-method"];
 const submittedData = {};
+
+//Validation rules
+
+const longEnough = (val, num) => val >= num;
+
+const stringOnly = (val) => /^[A-Za-z]+$/g.test(val);
+
+const noSpaces = (val) => /\S/g.test(val);
 
 deliveryForm.onsubmit = (e) => {
   e.preventDefault();
-  submittedData["Name"] = deliveryForm.firstname.value;
-  submittedData["Surname"] = deliveryForm.surname.value;
-  submittedData["Street"] = deliveryForm.street.value;
-  submittedData["House Number"] = deliveryForm.houseNumber.value;
-  submittedData["Flat Number"] = deliveryForm.flatNumber.value;
-  submittedData["Delivery Date"] = deliveryForm["delivery-date"].value;
-  submittedData["Payment Method"] = deliveryForm["payment-method"].value;
+  submittedData["Name"] = firstname.value;
+  submittedData["Surname"] = surname.value;
+  submittedData["Street"] = street.value;
+  submittedData["House Number"] = houseNumber.value;
+  submittedData["Flat Number"] = flatNumber.value;
+  submittedData["Delivery Date"] = dateInput.value;
+  submittedData["Payment Method"] = paymentMethod.value;
 
   showSummary();
 };
 
 const validateForm = () => {
-  console.log("validate");
+  if (longEnough(firstname.value.length, 4) && stringOnly(firstname.value)) {
+    firstname.classList.remove("incorrect");
+    firstname.classList.add("correct");
+    submitButton.disabled = false;
+  } else {
+    // if (!longEnough(firstname.value.length, 4) || !stringOnly(firstname.value)) {
+    firstname.classList.remove("correct");
+    firstname.classList.add("incorrect");
+    submitButton.disabled = true;
+  }
+  if (
+    longEnough(surname.value.length, 5) &&
+    stringOnly(surname.value) &&
+    noSpaces(surname.value)
+  ) {
+    surname.classList.remove("incorrect");
+    surname.classList.add("correct");
+    submitButton.disabled = false;
+  } else {
+    surname.classList.remove("correct");
+    surname.classList.add("incorrect");
+    submitButton.disabled = true;
+  }
+  if (/^[\d]+-?[\d]+$/g.test(flatNumber.value)) {
+    flatNumber.classList.remove("incorrect");
+    flatNumber.classList.add("correct");
+    submitButton.disabled = false;
+  } else {
+    flatNumber.classList.remove("correct");
+    flatNumber.classList.add("incorrect");
+    submitButton.disabled = true;
+  }
 };
 
-inputs.forEach((input) => input.addEventListener("blur", validateForm));
+inputs.forEach((field) => field.addEventListener("blur", validateForm));
 
 const getSubmittedData = async () => {
   const container = document.createElement("div");
@@ -38,12 +81,6 @@ const getSubmittedData = async () => {
   }
   return container;
 };
-
-const lessThan = (val, num) => val.length < num;
-
-const stringOnly = (val) => /\D/g.test(val);
-
-const noSpaces = (val) => /\S/g.test(val);
 
 const closeSummary = () => {
   let container = document.querySelector(".summary-container");

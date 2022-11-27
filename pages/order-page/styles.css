@@ -18,20 +18,24 @@ form.delivery-form input {
   padding: 0.5rem 1rem;
 }
 
-form.delivery-form input:invalid {
+form.delivery-form input.incorrect {
   border: 1px solid #d23c3c;
 }
+form.delivery-form input.correct {
+  border: 1px solid black;
+}
 
-form.delivery-form small.error-message {
+form.delivery-form input.correct small.error-message {
   visibility: hidden;
+}
+
+form.delivery-form input.incorrect ~ small.error-message {
+  visibility: visible;
   color: #d23c3c;
 }
 
-form.delivery-form input:valid ~ small.error-message {
+form.delivery-form input.correct ~ small.error-message {
   visibility: hidden;
-}
-form.delivery-form input:invalid ~ small.error-message {
-  visibility: visible;
 }
 
 div.summary-container {
