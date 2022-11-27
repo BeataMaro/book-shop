@@ -1,4 +1,7 @@
-@import "../catalog/style.css";
+
+a button.back {
+  margin: 1rem;
+}
 
 .form-header {
   text-align: center;

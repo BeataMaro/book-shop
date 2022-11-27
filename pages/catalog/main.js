@@ -264,7 +264,7 @@ const getBooks = async () => {
   const fadeBag = () => {
     const showBag = setTimeout(() => {
       bagSection.classList.add("expand");
-    }, 500);
+    }, 200);
     clearTimeout(showBag);
   };
   let amount = 1;
