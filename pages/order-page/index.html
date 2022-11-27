@@ -49,6 +49,7 @@
       <input
         type="text"
         name="street"
+        placeholder="Malinowa 1"
         id="street"
         required
         aria-errormessage="err4"
@@ -61,6 +62,7 @@
       <input
         id="houseNumber"
         name="houseNumber"
+        placeholder="33"
         type="number"
         min="1"
         required
@@ -71,7 +73,13 @@
       <label for="flatNumber"
         >Flat number<span aria-label="required">*</span>:</label
       >
-      <input type="text" name="flatNumber" required aria-errormessage="err6" />
+      <input
+        type="text"
+        name="flatNumber"
+        placeholder="1-37"
+        required
+        aria-errormessage="err6"
+      />
       <small id="err6" class="error-message"></small>
 
       <!-- Payment method -->

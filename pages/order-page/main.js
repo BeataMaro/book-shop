@@ -7,8 +7,7 @@ const submitButton = document.getElementById("button-send-form");
 //form data
 const firstname = deliveryForm["firstname"];
 const surname = deliveryForm["surname"];
-// const dateInput = deliveryForm["delivery-date"];
-const dateInput = document.getElementById("delivery-date");
+const dateInput = deliveryForm["delivery-date"];
 const street = deliveryForm.street;
 const houseNumber = deliveryForm.houseNumber;
 const flatNumber = deliveryForm.flatNumber;
@@ -21,6 +20,7 @@ const tomorrow = `${today.getFullYear()}-${today.getMonth() + 1}-${
 }`;
 dateInput.setAttribute("min", tomorrow);
 console.log(new Date(dateInput.value));
+
 //Validation rules
 
 const longEnough = (val, num) => val >= num;
@@ -74,7 +74,7 @@ const validateForm = () => {
     houseNumber.classList.remove("correct");
     houseNumber.classList.add("incorrect");
   }
-  if (/^[\d]*-?[\d]$/g.test(flatNumber.value)) {
+  if (/^[\d]+[-]?[\d]+$/g.test(flatNumber.value)) {
     flatNumber.classList.remove("incorrect");
     flatNumber.classList.add("correct");
     correctFields = [...correctFields, 1];
@@ -93,27 +93,31 @@ const validateForm = () => {
   if (new Date(dateInput.value) == "Invalid Date") {
     dateInput.classList.remove("correct");
     dateInput.classList.add("incorrect");
-    // const err = document.querySelector(
-    //   `#${dateInput.getAttribute("aria-errormessage")}`
-    // );
-    // err.textContent = "The field is invalid";
   } else {
     dateInput.classList.remove("incorrect");
     dateInput.classList.add("correct");
     correctFields = [...correctFields, 1];
-    // const err = document.querySelector(
-    //   `#${dateInput.getAttribute("aria-errormessage")}`
-    // );
-    // err.textContent = "";
   }
   correctFields.length === 6
     ? (submitButton.disabled = false)
     : (submitButton.disabled = true);
+
+  [...inputs].map((field) => {
+    const err = document.querySelector(
+      `#${field.getAttribute("aria-errormessage")}`
+    );
+    if (field.classList.contains("incorrect")) {
+      err.innerText = "The field is invalid";
+    } else if (field.classList.contains("correct")) {
+      err.innerText = "";
+    } else {
+      null;
+    }
+  });
 };
 
 inputs.forEach((field) => {
   field.addEventListener("blur", validateForm);
-  field.addEventListener("change", validateForm);
 });
 
 const getSubmittedData = async () => {
