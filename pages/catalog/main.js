@@ -38,11 +38,11 @@ const dragstart_handler = (ev) => {
   ev.dataTransfer.setDragImage(image, -10, -10);
 };
 
-function dragover_handler(ev) {
+const dragover_handler = (ev) => {
   ev.preventDefault();
   console.log("Drag over");
-}
-function drop_handler(ev) {
+};
+const drop_handler = (ev) => {
   const draggedBookId = ev.dataTransfer.getData("text");
   console.log(draggedBookId);
 
@@ -57,7 +57,7 @@ function drop_handler(ev) {
   console.log(bag);
   reloadBag();
   total.textContent = `Total: $${getTotal()}`;
-}
+};
 //BAG
 let bag = [];
 

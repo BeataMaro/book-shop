@@ -33,3 +33,35 @@ form.delivery-form input:valid ~ small.error-message {
 form.delivery-form input:invalid ~ small.error-message {
   visibility: visible;
 }
+
+div.summary-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 60vw;
+  background-color: rgb(120, 187, 183);
+  color: white;
+  font-size: 1.5rem;
+  padding: 1rem;
+  border: 2px solid rgb(66, 104, 101);
+  border-radius: 6px;
+  transition: all .4s ease;
+  display: flex;
+  flex-direction: column; 
+}
+div.summary-container h4 {
+  text-align: center;
+  color: black;
+  font-size: 2rem;
+  text-transform: uppercase;
+}
+div.summary-container .close-btn {
+  justify-self: flex-end;
+  align-self: flex-start;
+  order: 1;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+
+}
