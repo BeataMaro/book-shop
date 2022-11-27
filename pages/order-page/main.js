@@ -7,7 +7,8 @@ const submitButton = document.getElementById("button-send-form");
 //form data
 const firstname = deliveryForm["firstname"];
 const surname = deliveryForm["surname"];
-const dateInput = deliveryForm["delivery-date"];
+// const dateInput = deliveryForm["delivery-date"];
+const dateInput = document.getElementById("delivery-date");
 const street = deliveryForm.street;
 const houseNumber = deliveryForm.houseNumber;
 const flatNumber = deliveryForm.flatNumber;
@@ -44,14 +45,14 @@ deliveryForm.onsubmit = (e) => {
 };
 
 const validateForm = () => {
+  let correctFields = [];
   if (longEnough(firstname.value.length, 4) && stringsOnly(firstname.value)) {
     firstname.classList.remove("incorrect");
     firstname.classList.add("correct");
-    submitButton.disabled = false;
+    correctFields = [...correctFields, 1];
   } else {
     firstname.classList.remove("correct");
     firstname.classList.add("incorrect");
-    submitButton.disabled = true;
   }
   if (
     longEnough(surname.value.length, 5) &&
@@ -60,51 +61,60 @@ const validateForm = () => {
   ) {
     surname.classList.remove("incorrect");
     surname.classList.add("correct");
-    submitButton.disabled = false;
+    correctFields = [...correctFields, 1];
   } else {
     surname.classList.remove("correct");
     surname.classList.add("incorrect");
-    submitButton.disabled = true;
   }
   if (houseNumber.value > 0) {
     houseNumber.classList.remove("incorrect");
     houseNumber.classList.add("correct");
-    submitButton.disabled = false;
+    correctFields = [...correctFields, 1];
   } else {
     houseNumber.classList.remove("correct");
     houseNumber.classList.add("incorrect");
-    submitButton.disabled = true;
   }
   if (/^[\d]*-?[\d]$/g.test(flatNumber.value)) {
     flatNumber.classList.remove("incorrect");
     flatNumber.classList.add("correct");
-    submitButton.disabled = false;
+    correctFields = [...correctFields, 1];
   } else {
     flatNumber.classList.remove("correct");
     flatNumber.classList.add("incorrect");
-    submitButton.disabled = true;
   }
   if (numbersAllowed(street.value) && longEnough(street.value.length, 5)) {
     street.classList.remove("incorrect");
     street.classList.add("correct");
-    submitButton.disabled = false;
+    correctFields = [...correctFields, 1];
   } else {
     street.classList.remove("correct");
     street.classList.add("incorrect");
-    submitButton.disabled = true;
   }
   if (new Date(dateInput.value) == "Invalid Date") {
     dateInput.classList.remove("correct");
     dateInput.classList.add("incorrect");
-    submitButton.disabled = true;
+    // const err = document.querySelector(
+    //   `#${dateInput.getAttribute("aria-errormessage")}`
+    // );
+    // err.textContent = "The field is invalid";
   } else {
     dateInput.classList.remove("incorrect");
     dateInput.classList.add("correct");
-    submitButton.disabled = false;
+    correctFields = [...correctFields, 1];
+    // const err = document.querySelector(
+    //   `#${dateInput.getAttribute("aria-errormessage")}`
+    // );
+    // err.textContent = "";
   }
+  correctFields.length === 6
+    ? (submitButton.disabled = false)
+    : (submitButton.disabled = true);
 };
 
-inputs.forEach((field) => field.addEventListener("blur", validateForm));
+inputs.forEach((field) => {
+  field.addEventListener("blur", validateForm);
+  field.addEventListener("change", validateForm);
+});
 
 const getSubmittedData = async () => {
   const container = document.createElement("div");
