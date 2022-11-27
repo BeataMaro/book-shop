@@ -24,7 +24,9 @@ dateInput.setAttribute("min", tomorrow);
 
 const longEnough = (val, num) => val >= num;
 
-const stringOnly = (val) => /^[A-Za-z]+$/g.test(val);
+const stringsOnly = (val) => /^[A-Za-z]+$/g.test(val);
+
+const numbersAllowed = (val) => /^[A-Za-z]+\d?/g.test(val);
 
 const noSpaces = (val) => /\S/g.test(val);
 
@@ -42,19 +44,18 @@ deliveryForm.onsubmit = (e) => {
 };
 
 const validateForm = () => {
-  if (longEnough(firstname.value.length, 4) && stringOnly(firstname.value)) {
+  if (longEnough(firstname.value.length, 4) && stringsOnly(firstname.value)) {
     firstname.classList.remove("incorrect");
     firstname.classList.add("correct");
     submitButton.disabled = false;
   } else {
-    // if (!longEnough(firstname.value.length, 4) || !stringOnly(firstname.value)) {
     firstname.classList.remove("correct");
     firstname.classList.add("incorrect");
     submitButton.disabled = true;
   }
   if (
     longEnough(surname.value.length, 5) &&
-    stringOnly(surname.value) &&
+    stringsOnly(surname.value) &&
     noSpaces(surname.value)
   ) {
     surname.classList.remove("incorrect");
@@ -65,13 +66,31 @@ const validateForm = () => {
     surname.classList.add("incorrect");
     submitButton.disabled = true;
   }
-  if (/^[\d]+-?[\d]+$/g.test(flatNumber.value)) {
+  if (houseNumber.value > 0) {
+    houseNumber.classList.remove("incorrect");
+    houseNumber.classList.add("correct");
+    submitButton.disabled = false;
+  } else {
+    houseNumber.classList.remove("correct");
+    houseNumber.classList.add("incorrect");
+    submitButton.disabled = true;
+  }
+  if (/^[\d]*-?[\d]$/g.test(flatNumber.value)) {
     flatNumber.classList.remove("incorrect");
     flatNumber.classList.add("correct");
     submitButton.disabled = false;
   } else {
     flatNumber.classList.remove("correct");
     flatNumber.classList.add("incorrect");
+    submitButton.disabled = true;
+  }
+  if (numbersAllowed(street.value) && longEnough(street.value.length, 5)) {
+    street.classList.remove("incorrect");
+    street.classList.add("correct");
+    submitButton.disabled = false;
+  } else {
+    street.classList.remove("correct");
+    street.classList.add("incorrect");
     submitButton.disabled = true;
   }
 };
