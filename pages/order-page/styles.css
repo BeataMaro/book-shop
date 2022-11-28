@@ -37,6 +37,28 @@ form.delivery-form input.incorrect ~ small.error-message {
   color: #d23c3c;
 }
 
+form.delivery-form button.complete-button:disabled {
+  background-color: rgb(235, 237, 241);
+  color: rgb(171, 166, 166);
+  cursor: auto;
+}
+
+form.delivery-form button.complete-button:disabled:hover {
+  background-color: rgb(235, 237, 241);
+  color: rgb(171, 166, 166);
+}
+
+form.delivery-form button.complete-button {
+  background-color: rgb(29, 130, 122);
+  color: white;
+  border-radius: 6px;
+  transition: all, .2s linear;
+}
+
+form.delivery-form button.complete-button:hover {
+  background-color: rgb(44, 179, 168);
+}
+
 div.summary-container {
   position: absolute;
   top: 50%;
